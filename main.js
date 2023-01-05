@@ -7,14 +7,46 @@ const ctx = canvas.getContext('2d')
 
 const balls = []
 
-const Cue = new Ball(200, 200, 18, 'white')
-const ball = new Ball(500, 300, 18, 'yellow')
-// const ball1 = new Ball(500, 400, 18, 'red')
+const Cue = new Ball(250, canvas.height / 2, 18, 'white')
+const ball = new Ball(canvas.width - 500, canvas.height / 2, 18, 'red')
+const ball1 = new Ball(canvas.width - 500 + 32, canvas.height / 2 - 19, 18, 'red')
+const ball2 = new Ball(canvas.width - 500 + 32, canvas.height / 2 + 19, 18, 'red')
+const ball3 = new Ball(canvas.width - 500 + 64, canvas.height / 2, 18, 'red')
+const ball4 = new Ball(canvas.width - 500 + 64, canvas.height / 2 + 37, 18, 'red')
+const ball5 = new Ball(canvas.width - 500 + 64, canvas.height / 2 - 37, 18, 'red')
+const ball6 = new Ball(canvas.width - 500 + 96, canvas.height / 2 - 19, 18, 'red')
+const ball7 = new Ball(canvas.width - 500 + 96, canvas.height / 2 + 19, 18, 'red')
+const ball8 = new Ball(canvas.width - 500 + 96, canvas.height / 2 + 56, 18, 'red')
+const ball9 = new Ball(canvas.width - 500 + 96, canvas.height / 2 - 56, 18, 'red')
 
-balls.push(Cue, ball)
+// balls.push(Cue, ball)
+balls.push(Cue, ball, ball1, ball2, ball3, ball4, ball5, ball6, ball7, ball8, ball9)
+
+const pockets = [];
+const pocketsRad = 32
+pockets.push(
+    { x: 8, y: 8, rad: pocketsRad },
+    { x: canvas.width / 2, y: 0, rad: pocketsRad },
+    { x: canvas.width - 8, y: 8, rad: pocketsRad },
+    { x: 8, y: canvas.height - 8, rad: pocketsRad },
+    { x: canvas.width / 2, y: canvas.height, rad: pocketsRad },
+    { x: canvas.width - 8, y: canvas.height - 8, rad: pocketsRad }
+)
+
+
+function drawPockets(){
+
+    for(let i = 0; i < pockets.length; i++){
+
+        ctx.beginPath()
+        ctx.arc(pockets[i].x,pockets[i].y,pockets[i].rad,0,Math.PI*2)
+        ctx.fill()
+
+    }
+
+}
 
 animateAim()
-
 
 
 function animateAim() {
@@ -31,33 +63,55 @@ function animateAim() {
 
     }
 
-    if (Cue.speed <= 0) {
+    drawPockets()
+
+    if (Cue.velocity.x === 0 && Cue.velocity.y === 0) {
 
         requestAnimationFrame(animateAim)
 
     } else {
 
-        requestAnimationFrame(animateShoot)
+        return requestAnimationFrame(animateShoot)
 
     }
 
 
 }
 
-let ar = []
-let ar1 = []
 
 function animateShoot() {
 
-    ar.push({ x: Cue.x, y: Cue.y })
-    ar1.push({x : ball.x, y : ball.y})
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     for (let i = 0; i < balls.length; i++) {
 
-        balls[i].update(balls)
+        for (let j = i + 1; j < balls.length; j++) {
+
+            if (checkColision(balls[i], balls[j])) {
+
+                Ball.Collision(balls[i], balls[j])
+
+            }
+
+        }
+
+        for(let j = 0; j < pockets.length; j++){
+
+            if(checkColisionPockets(balls[i],pockets[j])){
+
+                balls[i].color = 'black'
+
+            }
+
+        }
+
+        balls[i].update()
+
 
     }
+
+    drawPockets()
+
 
     for (let i = 0; i < balls.length; i++) {
 
@@ -65,54 +119,25 @@ function animateShoot() {
 
     }
 
+    let moving = []
 
-    for (let i = 0; i < ar.length; i++) {
+    for (let i = 0; i < balls.length; i++) {
 
-        if(ar[i + 1]){
+        if (balls[i].velocity.x === 0 && balls[i].velocity.y === 0) {
 
-            ctx.save()
-            ctx.strokeStyle = 'black'
-            ctx.setLineDash([1,1])
-            ctx.beginPath()
-            ctx.moveTo(ar[i].x, ar[i].y)
-            ctx.lineTo(ar[i + 1].x, ar[i + 1].y)
-            ctx.stroke()
-            ctx.restore()
-
-
-        }
-
-    }
-    for (let i = 0; i < ar1.length; i++) {
-
-        if(ar1[i + 1]){
-
-            ctx.save()
-            ctx.strokeStyle = 'yellow'
-            ctx.setLineDash([1,1])
-
-            ctx.beginPath()
-            ctx.moveTo(ar1[i].x, ar1[i].y)
-            ctx.lineTo(ar1[i + 1].x, ar1[i + 1].y)
-            ctx.stroke()
-            ctx.restore()
-
+            moving.push(balls[i])
 
         }
 
     }
 
+    if (moving.length != balls.length) {
 
-    
-    
-    if (Cue.speed > 0) {
-        
-        
         requestAnimationFrame(animateShoot)
 
     } else {
 
-        requestAnimationFrame(animateAim)
+        return animateAim()
 
     }
 
