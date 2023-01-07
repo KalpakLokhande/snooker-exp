@@ -7,7 +7,7 @@ class Ball {
         this.rad = rad;
         this.color = color
 
-        
+
         this.force = 0
         this.angle = 0
 
@@ -15,13 +15,16 @@ class Ball {
         this.maxUnstablePower = 30
 
         this.mass = 0.17
-        this.BCcoFri = 0.07
+        this.BCcoFri = 0.03
         this.normalForce = this.mass * 9.8
 
         this.friction = this.BCcoFri * this.normalForce
         this.velocity = { x: 0, y: 0 }
 
         this.allowShoot = true;
+
+        this.scored = false;
+        this.hittingIndex = null
 
 
         if (this.color === 'white') {
@@ -35,6 +38,63 @@ class Ball {
     updateAim() {
 
         this.allowShoot = true;
+        this.hittingIndex = null
+
+        let start = { x: this.x, y: this.y }
+        let end = { x: this.x + Math.cos(this.angle) * 1000, y: this.y + Math.sin(this.angle) * 1000 }
+
+        let index = 0;
+
+        for (let ball of balls) {
+
+            if (previewIntersection([start, end], balls[index]).length != 0) {
+
+                this.hittingIndex = index
+
+                let impact = previewIntersection([start, end], balls[index])
+
+                end.x = impact[impact.length - 1].x
+                end.y = impact[impact.length - 1].y
+
+            }
+            if (previewIntersection([start, end], balls[index]).length > 1) {
+
+                return
+
+
+            } else {
+
+                index++
+
+            }
+
+        }
+
+        if (this.hittingIndex != null) {
+
+            let angle = Math.atan2(end.y - balls[this.hittingIndex].y, end.x - balls[this.hittingIndex].x)
+
+            ctx.beginPath()
+            ctx.moveTo(balls[this.hittingIndex].x, balls[this.hittingIndex].y)
+            ctx.lineTo(balls[this.hittingIndex].x - Math.cos(angle) * 50, balls[this.hittingIndex].y - Math.sin(angle) * 50)
+            ctx.stroke()
+
+
+
+        }
+
+        ctx.beginPath()
+        ctx.moveTo(start.x, start.y)
+        ctx.lineTo(end.x, end.y)
+        ctx.stroke()
+
+        ctx.save()
+        ctx.beginPath()
+        ctx.fillStyle = 'white'
+        ctx.globalAlpha = 0.5
+        ctx.arc(end.x, end.y, 18, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.restore()
 
         if (this.mag >= this.maxStablePower) {
 
@@ -48,12 +108,31 @@ class Ball {
 
         if (this.controls.addDir) {
 
-            this.angle += 0.02;
+            if(this.hittingIndex != null){
+
+                this.angle += 0.005
+
+            }else{
+
+
+                this.angle += 0.02;
+
+            }
+
 
         }
         if (this.controls.subDir) {
 
-            this.angle -= 0.02;
+            if(this.hittingIndex != null){
+
+                this.angle -= 0.005
+
+            }else{
+
+                this.angle -= 0.02;
+
+            }
+
 
         }
         if (this.controls.addMag) {
@@ -77,7 +156,12 @@ class Ball {
 
         }
 
-       
+
+
+
+        // console.log(this.hittingIndex)
+
+
         ctx.save()
         ctx.beginPath()
         ctx.lineWidth = 3;
@@ -90,10 +174,10 @@ class Ball {
         stick.src = 'pool-stick3.png'
 
         ctx.save()
-        ctx.translate(this.x,this.y)
-        ctx.rotate(this.angle + Math.PI/2)
+        ctx.translate(this.x, this.y)
+        ctx.rotate(this.angle + Math.PI / 2)
         ctx.beginPath()
-        ctx.drawImage(stick, Math.sin(this.force), this.force * 3, 15,900)
+        ctx.drawImage(stick, Math.sin(this.force), this.force * 3, 15, 900)
         ctx.restore()
 
     }
@@ -122,7 +206,7 @@ class Ball {
 
         if (this.x - this.rad < 0) {
 
-            this.x += (this.x + this.rad) * 0.2
+            this.x += (this.x + this.rad) * 0.1
 
             this.angle = (2 * Math.PI / 2) - this.angle
 
@@ -130,7 +214,7 @@ class Ball {
 
         if (this.x + this.rad > canvas.width) {
 
-            this.x += (this.x - canvas.width) * 0.2
+            this.x += (this.x - canvas.width) * 0.1
 
             this.angle = (2 * -Math.PI) / 2 - this.angle
 
@@ -138,7 +222,7 @@ class Ball {
 
         if (this.y - this.rad < 0) {
 
-            this.y += (this.y + this.rad) * 0.2
+            this.y += (this.y + this.rad) * 0.1
 
             this.angle = (2 * Math.PI) - this.angle
 
@@ -146,9 +230,17 @@ class Ball {
 
         if (this.y + this.rad > canvas.height) {
 
-            this.y += (this.y - canvas.height) * 0.2
+            this.y += (this.y - canvas.height) * 0.1
 
             this.angle = (2 * -Math.PI) - this.angle
+
+        }
+        if (this.scored) {
+
+            this.x = -50;
+            this.y = -50;
+            this.velocity.x = 0;
+            this.velocity.y = 0
 
         }
 
@@ -186,8 +278,8 @@ class Ball {
 
     static Collision(ball1, ball2) {
 
-        ball1.x +=  (ball1.x - ball2.x) * 0.1
-        ball1.y +=  (ball1.y - ball2.y) * 0.1
+        ball1.x += (ball1.x - ball2.x) * 0.1
+        ball1.y += (ball1.y - ball2.y) * 0.1
 
 
         const normal = {

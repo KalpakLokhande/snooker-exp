@@ -34,19 +34,19 @@ pockets.push(
 )
 
 
-function drawPockets(){
+function drawPockets() {
 
-    for(let i = 0; i < pockets.length; i++){
+    for (let i = 0; i < pockets.length; i++) {
 
         ctx.beginPath()
-        ctx.arc(pockets[i].x,pockets[i].y,pockets[i].rad,0,Math.PI*2)
+        ctx.arc(pockets[i].x, pockets[i].y, pockets[i].rad, 0, Math.PI * 2)
         ctx.fill()
 
     }
 
 }
 
-animateAim()
+animateAim(balls)
 
 
 function animateAim() {
@@ -54,7 +54,7 @@ function animateAim() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    Cue.updateAim()
+    drawPockets()
 
 
     for (let i = 0; i < balls.length; i++) {
@@ -63,7 +63,9 @@ function animateAim() {
 
     }
 
-    drawPockets()
+
+    Cue.updateAim()
+
 
     if (Cue.velocity.x === 0 && Cue.velocity.y === 0) {
 
@@ -83,34 +85,41 @@ function animateShoot() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+    drawPockets()
+
+
     for (let i = 0; i < balls.length; i++) {
 
-        for (let j = i + 1; j < balls.length; j++) {
+        if (!balls[i].scored) {
 
-            if (checkColision(balls[i], balls[j])) {
+            for (let j = i + 1; j < balls.length; j++) {
 
-                Ball.Collision(balls[i], balls[j])
+                if (checkColision(balls[i], balls[j])) {
 
-            }
+                    Ball.Collision(balls[i], balls[j])
 
-        }
-
-        for(let j = 0; j < pockets.length; j++){
-
-            if(checkColisionPockets(balls[i],pockets[j])){
-
-                balls[i].color = 'black'
+                }
 
             }
 
-        }
+            for (let j = 0; j < pockets.length; j++) {
 
-        balls[i].update()
+                if (checkColisionPockets(balls[i], pockets[j])) {
+
+                    balls[i].scored = true;
+                    balls[i].color = 'black'
+
+                }
+
+            }
+
+            balls[i].update()
+
+        }
 
 
     }
 
-    drawPockets()
 
 
     for (let i = 0; i < balls.length; i++) {
@@ -128,8 +137,15 @@ function animateShoot() {
             moving.push(balls[i])
 
         }
+        if (balls[i].scored) {
+
+            moving.push(balls[i])
+
+        }
 
     }
+
+    console.log(moving.length)
 
     if (moving.length != balls.length) {
 
