@@ -25,6 +25,7 @@ class Ball {
 
         this.scored = false;
         this.hittingIndex = null
+        this.start = true;
 
 
         if (this.color === 'white') {
@@ -39,6 +40,25 @@ class Ball {
 
         this.allowShoot = true;
         this.hittingIndex = null
+
+        if(this.start){
+
+            document.addEventListener('mousemove', Ball.selectStart)
+       
+
+            onmousedown = (e) => {
+
+                this.x = e.x
+                this.y = e.y
+
+                document.removeEventListener('mousemove',Ball.selectStart)
+
+                this.start = false;
+            }
+
+
+
+        }
 
         let start = { x: this.x, y: this.y }
         let end = { x: this.x + Math.cos(this.angle) * 1000, y: this.y + Math.sin(this.angle) * 1000 }
@@ -308,6 +328,13 @@ class Ball {
         ball1.velocity.y = newV1n * normal.y + v1t * tangent.y
         ball2.velocity.x = newV2n * normal.x + v2t * tangent.x
         ball2.velocity.y = newV2n * normal.y + v2t * tangent.y
+
+    }
+
+    static selectStart(e){
+
+        this.x = e.x
+        this.y = e.y
 
     }
 

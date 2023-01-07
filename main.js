@@ -8,19 +8,28 @@ const ctx = canvas.getContext('2d')
 const balls = []
 
 const Cue = new Ball(250, canvas.height / 2, 18, 'white')
-const ball = new Ball(canvas.width - 500, canvas.height / 2, 18, 'red')
-const ball1 = new Ball(canvas.width - 500 + 32, canvas.height / 2 - 19, 18, 'red')
-const ball2 = new Ball(canvas.width - 500 + 32, canvas.height / 2 + 19, 18, 'red')
-const ball3 = new Ball(canvas.width - 500 + 64, canvas.height / 2, 18, 'red')
-const ball4 = new Ball(canvas.width - 500 + 64, canvas.height / 2 + 37, 18, 'red')
-const ball5 = new Ball(canvas.width - 500 + 64, canvas.height / 2 - 37, 18, 'red')
-const ball6 = new Ball(canvas.width - 500 + 96, canvas.height / 2 - 19, 18, 'red')
-const ball7 = new Ball(canvas.width - 500 + 96, canvas.height / 2 + 19, 18, 'red')
-const ball8 = new Ball(canvas.width - 500 + 96, canvas.height / 2 + 56, 18, 'red')
-const ball9 = new Ball(canvas.width - 500 + 96, canvas.height / 2 - 56, 18, 'red')
+const ball1 = new Ball(canvas.width - 400, canvas.height / 2, 18, 'red')
+const ball2 = new Ball(canvas.width - 400 + 32, canvas.height / 2 - 19, 18, 'red')
+const ball3 = new Ball(canvas.width - 400 + 32, canvas.height / 2 + 19, 18, 'red')
+const ball4 = new Ball(canvas.width - 400 + 64, canvas.height / 2, 18, 'red')
+const ball5 = new Ball(canvas.width - 400 + 64, canvas.height / 2 + 37, 18, 'red')
+const ball6 = new Ball(canvas.width - 400 + 64, canvas.height / 2 - 37, 18, 'red')
+const ball7 = new Ball(canvas.width - 400 + 96, canvas.height / 2 - 19, 18, 'red')
+const ball8 = new Ball(canvas.width - 400 + 96, canvas.height / 2 + 19, 18, 'red')
+const ball9 = new Ball(canvas.width - 400 + 96, canvas.height / 2 + 56, 18, 'red')
+const ball10 = new Ball(canvas.width - 400 + 96, canvas.height / 2 - 56, 18, 'red')
+
+const blackBall = new Ball(canvas.width - 200, canvas.height / 2, 18, 'black')
+const pinkBall = new Ball(canvas.width - 550, canvas.height/2, 18, '#fdab9f')
+const blueBall = new Ball(canvas.width / 2, canvas.height/2, 18, '#3944bc')
+const yellowBall = new Ball(canvas.width / 4, canvas.height - 200, 18, 'yellow')
+const brownBall = new Ball(canvas.width / 4, canvas.height / 2, 18, 'brown')
+const greenBall = new Ball(canvas.width/ 4, 200, 18, 'green')
+
+
 
 // balls.push(Cue, ball)
-balls.push(Cue, ball, ball1, ball2, ball3, ball4, ball5, ball6, ball7, ball8, ball9)
+balls.push(Cue, ball1, ball2, ball3, ball4, ball5, ball6, ball7, ball8, ball9, ball10, blackBall, pinkBall, blueBall, yellowBall, brownBall, greenBall)
 
 const pockets = [];
 const pocketsRad = 32
@@ -44,7 +53,26 @@ function drawPockets() {
 
     }
 
+    ctx.save()
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'white'
+    ctx.beginPath()
+    ctx.moveTo(canvas.width/4,0)
+    ctx.lineTo(canvas.width/4,canvas.height)
+    ctx.stroke()
+
+    ctx.beginPath()
+    ctx.arc(canvas.width/4,canvas.height/2,160,Math.PI/2,-Math.PI/2)
+    ctx.stroke()
+
+    ctx.restore()
+
+
+
+
 }
+
+
 
 animateAim(balls)
 
