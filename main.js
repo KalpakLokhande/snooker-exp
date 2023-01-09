@@ -7,7 +7,7 @@ const ctx = canvas.getContext('2d')
 
 const balls = []
 
-const Cue = new Ball(250, canvas.height / 2, 18, 'white')
+const Cue = new Ball(250, canvas.height / 2, 18, 'snow')
 const ball1 = new Ball(canvas.width - 400, canvas.height / 2, 18, 'red')
 const ball2 = new Ball(canvas.width - 400 + 32, canvas.height / 2 - 19, 18, 'red')
 const ball3 = new Ball(canvas.width - 400 + 32, canvas.height / 2 + 19, 18, 'red')
@@ -20,11 +20,15 @@ const ball9 = new Ball(canvas.width - 400 + 96, canvas.height / 2 + 56, 18, 'red
 const ball10 = new Ball(canvas.width - 400 + 96, canvas.height / 2 - 56, 18, 'red')
 
 const blackBall = new Ball(canvas.width - 200, canvas.height / 2, 18, 'black')
-const pinkBall = new Ball(canvas.width - 550, canvas.height/2, 18, '#fdab9f')
-const blueBall = new Ball(canvas.width / 2, canvas.height/2, 18, '#3944bc')
+// const pinkBall = new Ball(canvas.width - 550, canvas.height/2, 18, '#fdab9f')
+const pinkBall = new Ball(canvas.width - 550, canvas.height/2, 18, 'deepPink')
+
+// const blueBall = new Ball(canvas.width / 2, canvas.height/2, 18, '#3944bc')
+const blueBall = new Ball(canvas.width / 2, canvas.height/2, 18, 'royalBlue')
+
 const yellowBall = new Ball(canvas.width / 4, canvas.height - 200, 18, 'yellow')
 const brownBall = new Ball(canvas.width / 4, canvas.height / 2, 18, 'brown')
-const greenBall = new Ball(canvas.width/ 4, 200, 18, 'green')
+const greenBall = new Ball(canvas.width/ 4, 200, 18, 'seaGreen')
 
 
 
@@ -173,7 +177,6 @@ function animateShoot() {
 
     }
 
-    console.log(moving.length)
 
     if (moving.length != balls.length) {
 

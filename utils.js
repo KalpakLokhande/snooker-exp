@@ -95,7 +95,7 @@ function previewIntersection([start, end], ball) {
   let c = 2 * (v1.x * v1.x + v1.y * v1.y)
 
   b *= -2
-  let d = Math.sqrt(b * b - 2 * c * (v2.x * v2.x + v2.y * v2.y - (ball.rad * ball.rad) * 4))
+  let d = Math.sqrt(b * b - 2 * c * (v2.x * v2.x + v2.y * v2.y - (ball.rad * ball.rad) * 3.9))
 
   if (isNaN(d)) {
 

@@ -28,7 +28,7 @@ class Ball {
         this.start = true;
 
 
-        if (this.color === 'white') {
+        if (this.color === 'snow') {
 
             this.controls = new Controls(this)
 
@@ -61,7 +61,7 @@ class Ball {
         }
 
         let start = { x: this.x, y: this.y }
-        let end = { x: this.x + Math.cos(this.angle) * 1000, y: this.y + Math.sin(this.angle) * 1000 }
+        let end = { x: this.x + Math.cos(this.angle) * 5000, y: this.y + Math.sin(this.angle) * 5000 }
 
         let index = 0;
 
@@ -96,7 +96,7 @@ class Ball {
 
             ctx.beginPath()
             ctx.moveTo(balls[this.hittingIndex].x, balls[this.hittingIndex].y)
-            ctx.lineTo(balls[this.hittingIndex].x - Math.cos(angle) * 50, balls[this.hittingIndex].y - Math.sin(angle) * 50)
+            ctx.lineTo(balls[this.hittingIndex].x - Math.cos(angle) * this.force * 100, balls[this.hittingIndex].y - Math.sin(angle) *  this.force * 100)
             ctx.stroke()
 
 
@@ -285,13 +285,35 @@ class Ball {
 
     draw() {
 
+
+        ctx.save()
+        ctx.globalAlpha = 0.3
+        ctx.fillStyle = 'black'
+        ctx.beginPath()
+        ctx.arc(this.x - 5, this.y - 5, this.rad, 0,Math.PI*2)
+        ctx.blur = 0.4
+        ctx.fill()
+        ctx.restore()
+
         ctx.save()
         ctx.fillStyle = this.color
         ctx.strokeStyle = 'black'
+        ctx.lineWidth = 1
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.rad, 0, Math.PI * 2)
         ctx.fill()
         ctx.stroke()
+        ctx.restore()
+
+        let shine = new Image()
+        shine.src = 'shine1.png'
+
+        ctx.save()
+        ctx.globalAlpha = 0.3
+        ctx.translate(this.x,this.y)
+        ctx.beginPath()
+        ctx.drawImage(shine,-this.rad * 1.5,-this.rad * 1.5 ,this.rad*3,this.rad*3)
+        ctx.closePath()
         ctx.restore()
 
     }
