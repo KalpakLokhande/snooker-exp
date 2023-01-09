@@ -5,6 +5,16 @@ canvas.width = innerWidth;
 
 const ctx = canvas.getContext('2d')
 
+
+const pockets = [];
+const pocketsRad = 32
+
+let texture = new Image()
+texture.src = 'texture2.png'
+
+let shadow = new Image()
+shadow.src = 'shadow.png'
+
 const balls = []
 
 const Cue = new Ball(250, canvas.height / 2, 18, 'snow')
@@ -21,22 +31,20 @@ const ball10 = new Ball(canvas.width - 400 + 96, canvas.height / 2 - 56, 18, 're
 
 const blackBall = new Ball(canvas.width - 200, canvas.height / 2, 18, 'black')
 // const pinkBall = new Ball(canvas.width - 550, canvas.height/2, 18, '#fdab9f')
-const pinkBall = new Ball(canvas.width - 550, canvas.height/2, 18, 'deepPink')
+const pinkBall = new Ball(canvas.width - 439, canvas.height / 2, 18, 'deepPink')
 
 // const blueBall = new Ball(canvas.width / 2, canvas.height/2, 18, '#3944bc')
-const blueBall = new Ball(canvas.width / 2, canvas.height/2, 18, 'royalBlue')
+const blueBall = new Ball(canvas.width / 2, canvas.height / 2, 18, 'royalBlue')
 
-const yellowBall = new Ball(canvas.width / 4, canvas.height - 200, 18, 'yellow')
-const brownBall = new Ball(canvas.width / 4, canvas.height / 2, 18, 'brown')
-const greenBall = new Ball(canvas.width/ 4, 200, 18, 'seaGreen')
+const yellowBall = new Ball(canvas.width / 4, canvas.height / 2 + 160, 18, 'yellow')
+const brownBall = new Ball(canvas.width / 4, canvas.height / 2, 18, 'saddleBrown')
+const greenBall = new Ball(canvas.width / 4, canvas.height / 2 - 160, 18, 'seaGreen')
 
 
 
 // balls.push(Cue, ball)
 balls.push(Cue, ball1, ball2, ball3, ball4, ball5, ball6, ball7, ball8, ball9, ball10, blackBall, pinkBall, blueBall, yellowBall, brownBall, greenBall)
 
-const pockets = [];
-const pocketsRad = 32
 pockets.push(
     { x: 8, y: 8, rad: pocketsRad },
     { x: canvas.width / 2, y: 0, rad: pocketsRad },
@@ -49,11 +57,28 @@ pockets.push(
 
 function drawPockets() {
 
+    ctx.save()
+    ctx.globalAlpha = 0.3
+    ctx.beginPath()
+    ctx.drawImage(texture, 0, 0, canvas.width, canvas.height)
+    ctx.restore()
+
     for (let i = 0; i < pockets.length; i++) {
+
+        ctx.save()
+        ctx.translate(pockets[i].x, pockets[i].y)
+        ctx.beginPath()
+        ctx.globalAlpha = 0.5
+        // ctx.arc(pockets[i].x, pockets[i].y, pockets[i].rad, 0, Math.PI * 2)
+        ctx.drawImage(shadow, -70, -70, pocketsRad * 4.5, pocketsRad * 4.5)
+        ctx.restore()
+        // ctx.fill()
 
         ctx.beginPath()
         ctx.arc(pockets[i].x, pockets[i].y, pockets[i].rad, 0, Math.PI * 2)
         ctx.fill()
+
+
 
     }
 
@@ -61,30 +86,27 @@ function drawPockets() {
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'white'
     ctx.beginPath()
-    ctx.moveTo(canvas.width/4,0)
-    ctx.lineTo(canvas.width/4,canvas.height)
+    ctx.moveTo(canvas.width / 4, 0)
+    ctx.lineTo(canvas.width / 4, canvas.height)
     ctx.stroke()
 
     ctx.beginPath()
-    ctx.arc(canvas.width/4,canvas.height/2,160,Math.PI/2,-Math.PI/2)
+    ctx.arc(canvas.width / 4, canvas.height / 2, 160, Math.PI / 2, -Math.PI / 2)
     ctx.stroke()
 
     ctx.restore()
 
-
-
-
 }
 
-
-
 animateAim(balls)
-
 
 function animateAim() {
 
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+
+
 
     drawPockets()
 
@@ -116,6 +138,7 @@ function animateAim() {
 function animateShoot() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
 
     drawPockets()
 

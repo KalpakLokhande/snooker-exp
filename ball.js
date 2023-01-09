@@ -27,6 +27,8 @@ class Ball {
         this.hittingIndex = null
         this.start = true;
 
+        this.shadow = new Image()
+        this.shadow.src = 'shadow.png'
 
         if (this.color === 'snow') {
 
@@ -176,12 +178,6 @@ class Ball {
 
         }
 
-
-
-
-        // console.log(this.hittingIndex)
-
-
         ctx.save()
         ctx.beginPath()
         ctx.lineWidth = 3;
@@ -287,11 +283,19 @@ class Ball {
 
 
         ctx.save()
-        ctx.globalAlpha = 0.3
+        ctx.translate(this.x,this.y)
+        ctx.globalAlpha = 0.5
         ctx.fillStyle = 'black'
         ctx.beginPath()
-        ctx.arc(this.x - 5, this.y - 5, this.rad, 0,Math.PI*2)
+        ctx.drawImage(this.shadow,-40,-40,this.rad * 4,this.rad * 4)
         ctx.fill()
+        ctx.restore()
+
+        ctx.save()
+        ctx.globalAlpha = 0.5
+        ctx.beginPath()
+        ctx.arc(this.x - 5,this.y - 5,this.rad,0,Math.PI*2)
+        // ctx.fill()
         ctx.restore()
 
         ctx.save()

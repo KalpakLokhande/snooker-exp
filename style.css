@@ -7,5 +7,6 @@ body{
 
 }
 #canvas{
-    background: radial-gradient(green,darkGreen,rgb(0, 70, 0));
+    background: radial-gradient(green,darkGreen,rgb(0, 50, 0));
+    /* background-color: darkGreen; */
 }
