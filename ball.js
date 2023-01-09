@@ -291,7 +291,6 @@ class Ball {
         ctx.fillStyle = 'black'
         ctx.beginPath()
         ctx.arc(this.x - 5, this.y - 5, this.rad, 0,Math.PI*2)
-        ctx.blur = 0.4
         ctx.fill()
         ctx.restore()
 
